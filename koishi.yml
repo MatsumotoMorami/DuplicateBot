@@ -1,0 +1,100 @@
+plugins:
+  group:server:
+    server:qzpkmp:
+      port: 5140
+      maxPort: 5149
+    ~server-satori:w8g9o0: {}
+    ~server-temp:n1yszb: {}
+  group:basic:
+    ~admin:2ji5tk: {}
+    ~bind:ovl3wk: {}
+    commands:yvi72u:
+      maimaidx.alias-search:
+        aliases:
+          别名: null
+      maimaidx.rating-calc:
+        aliases:
+          rc: null
+    help:enr3nn: {}
+    http:ji91bj: {}
+    ~inspect:tgmt74: {}
+    locales:i09e5h: {}
+    proxy-agent:pavnmv: {}
+    rate-limit:f4zfac: {}
+    telemetry:syqy8c: {}
+  group:console:
+    actions:hlh959: {}
+    analytics:aagmb5: {}
+    android:bt6te4:
+      $if: env.KOISHI_AGENT?.includes('Android')
+    ~auth:ka2wvz: {}
+    config:v0g5yw: {}
+    console:yfew13:
+      open: true
+    dataview:yx04k6: {}
+    desktop:gfnebp:
+      $if: env.KOISHI_AGENT?.includes('Desktop')
+    explorer:5gkvh9: {}
+    logger:1o6t1t: {}
+    insight:cjcvgb: {}
+    market:99ecr4:
+      search:
+        endpoint: 'https://registry.koishi.t4wefan.pub/index.json '
+      registry:
+        endpoint: https://registry.npmmirror.com
+    notifier:mfz4y3: {}
+    oobe:4ktuqg: {}
+    sandbox:5fg2ly: {}
+    status:ltmqi3: {}
+    theme-vanilla:xwimbo: {}
+  group:storage:
+    ~database-mongo:ylynzb:
+      database: koishi
+    ~database-mysql:gop95f:
+      database: koishi
+    ~database-postgres:156lwm:
+      database: koishi
+    database-sqlite:o28cyo:
+      path: data/koishi.db
+    assets-local:uxh6p1: {}
+  group:adapter:
+    ~adapter-dingtalk:y6mcqi: {}
+    ~adapter-discord:m0h9qb: {}
+    ~adapter-kook:mmw3if: {}
+    ~adapter-lark:iiir80: {}
+    ~adapter-line:k556hx: {}
+    ~adapter-mail:5kmaa8: {}
+    ~adapter-matrix:1yl2az: {}
+    ~adapter-qq:o2wl2w: {}
+    ~adapter-satori:4eexwk: {}
+    ~adapter-slack:y8wxfx: {}
+    ~adapter-telegram:vcbpjl: {}
+    ~adapter-wechat-official:79ox5a:
+      appid: admin
+      secret: Catmario666
+    ~adapter-wecom:dd93st: {}
+    ~adapter-whatsapp:0anjgj: {}
+    ~adapter-zulip:hdbtou: {}
+  group:develop:
+    $if: env.NODE_ENV === 'development'
+    hmr:w824m3:
+      root: .
+    echo:9da1qi: {}
+  maimai:9xxaxn:
+    preferred: df
+  puppeteer:a1vkyf: {}
+  main:m2vw5u: {}
+  adapter-onebot:kpso4c:
+    selfId: '3672520166'
+    token: ''
+  arcaea-b30:cw2eww: {}
+  ~sch:tzc4lq: {}
+  schedule:icph3u:
+    minInterval: 30
+  ~change-auth-callme:7t5bfr: {}
+  ~memes-api:sf5482: {}
+prefix:
+  - .
+  - /
+  - 。
+  - null
