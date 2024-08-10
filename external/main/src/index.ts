@@ -22,11 +22,17 @@ export function apply(ctx: Context) {
         ) return true;
         else return false;
     }
+    function checkCmd(opt, cmdList) {
+        for (let i = 0; i < cmdList.length; i++) {
+            if (opt == cmdList[i]) return true;
+        }
+        return false;
+    }
     ctx.on('message', (session) => {
         console.log(session.channelId + ' ' + session.userId + ':' + session.content)
         if (addPrefixJudge(session, 'jwz') || addPrefixJudge(session, '金炜智')) {
             let fileList = fs.readdirSync('C:/Users/Server/Desktop/Bot/external/main/jwz_pictures');
-            let randIndex = getRandomInt(0, fileList.length - 1);
+            let randIndex = getRandomInt(0, fileList.length);
             session.send(segment('image', {
                 url: 'C:/Users/Server/Desktop/Bot/external/main/jwz_pictures/' + fileList[randIndex]
             }))
@@ -35,7 +41,7 @@ export function apply(ctx: Context) {
             addPrefixJudge(session.content, '张宇杰') ||
             addPrefixJudge(session.content, '章鱼杰')) {
             let fileList = fs.readdirSync('C:/Users/Server/Desktop/Bot/external/main/zyj_pictures');
-            let randIndex = getRandomInt(0, fileList.length - 1);
+            let randIndex = getRandomInt(0, fileList.length);
             session.send(segment('image', {
                 url: 'C:/Users/Server/Desktop/Bot/external/main/zyj_pictures/' + fileList[randIndex]
             }))
@@ -45,7 +51,7 @@ export function apply(ctx: Context) {
             addPrefixJudge(session.content, 'libersky') ||
             addPrefixJudge(session.content, 'Libersky')) {
             let fileList = fs.readdirSync('C:/Users/Server/Desktop/Bot/external/main/zjh_pictures');
-            let randIndex = getRandomInt(0, fileList.length - 1);
+            let randIndex = getRandomInt(0, fileList.length);
             session.send(segment('image', {
                 url: 'C:/Users/Server/Desktop/Bot/external/main/zjh_pictures/' + fileList[randIndex]
             }))
@@ -54,7 +60,7 @@ export function apply(ctx: Context) {
             addPrefixJudge(session.content, 'Chisato') ||
             addPrefixJudge(session.content, 'chisato')) {
             let fileList = fs.readdirSync('C:/Users/Server/Desktop/Bot/external/main/gyc_pictures');
-            let randIndex = getRandomInt(0, fileList.length - 1);
+            let randIndex = getRandomInt(0, fileList.length);
             session.send(segment('image', {
                 url: 'C:/Users/Server/Desktop/Bot/external/main/gyc_pictures/' + fileList[randIndex]
             }))
@@ -63,14 +69,14 @@ export function apply(ctx: Context) {
             addPrefixJudge(session.content, '沈凌亦') ||
             addPrefixJudge(session.content, '301')) {
             let fileList = fs.readdirSync('C:/Users/Server/Desktop/Bot/external/main/sly_pictures');
-            let randIndex = getRandomInt(0, fileList.length - 1);
+            let randIndex = getRandomInt(0, fileList.length);
             session.send(segment('image', {
                 url: 'C:/Users/Server/Desktop/Bot/external/main/sly_pictures/' + fileList[randIndex]
             }))
         }
         else if (addPrefixJudge(session.content, '鱼丸')) {
             let fileList = fs.readdirSync('C:/Users/Server/Desktop/Bot/external/main/yw_pictures');
-            let randIndex = getRandomInt(0, fileList.length - 1);
+            let randIndex = getRandomInt(0, fileList.length);
             session.send(segment('image', {
                 url: 'C:/Users/Server/Desktop/Bot/external/main/yw_pictures/' + fileList[randIndex]
             }))
@@ -78,47 +84,37 @@ export function apply(ctx: Context) {
         else if (addPrefixJudge(session.content, '美丽sly') ||
             addPrefixJudge(session.content, '美丽301') ||
             addPrefixJudge(session.content, '美丽沈凌亦')) {
+            let fileList = fs.readdirSync('C:/Users/Server/Desktop/Bot/external/main/sly_videos');
+            let randIndex = getRandomInt(0, fileList.length);
+            console.log(fileList[randIndex]);
             session.send(h('video', {
-                src: 'C:/Users/Server/Desktop/Bot/external/main/sly_videos/1954868fafebe3364eab337762e50a8a.mp4'
+                src: 'C:/Users/Server/Desktop/Bot/external/main/sly_videos/' + fileList[randIndex]
             }))
         }
-        else if (addPrefixJudge(session.content.substring(0, 3), 'maa')) {
+        else if (addPrefixJudge(session.content.substring(0, 3), 'maa') || addPrefixJudge(session.content.substring(0, 4), 'maa')) {
             if (session.userId == "2803355799") {
-                let opt = session.content.substring(4, session.content.length);
-                if (opt != "sc") fetch("http://192.168.0.106:3000/" + opt, {
-                    method: "POST"
-                })
-                session.send("已发送请求.")
-                setTimeout(() => {
-                    fetch("http://192.168.0.106:3000/sc", {
+                let a = 0;
+                let cmdList = ["on", "off", "sc"]
+                if (addPrefixJudge(session.content.substring(0, 3), 'maa')) a = 4;
+                else a = 5;
+                let opt = session.content.substring(a, session.content.length);
+                if (checkCmd(opt, cmdList)) {
+                    if (opt != "sc") fetch("http://192.168.0.106:3000/" + opt, {
                         method: "POST"
                     })
-                }, 6000);
-                setTimeout(() => {
-                    session.send(segment('image', {
-                        url: 'C:/Users/Server/Desktop/Bot/external/main/screenshot/screenshot.png'
-                    }))
-                }, 9000);
-            }
-            else session.send("无权限.")
-        }
-        else if (addPrefixJudge(session.content.substring(0, 4), 'maa')) {
-            if (session.userId == "2803355799") {
-                let opt = session.content.substring(5, session.content.length);
-                if (opt != "sc") fetch("http://192.168.0.106:3000/" + opt, {
-                    method: "POST"
-                })
-                session.send("已发送请求.")
-                setTimeout(() => {
-                    fetch("http://192.168.0.106:3000/sc", {
-                        method: "POST"
-                    })
-                }, 6000);
-                setTimeout(() => {
-                    session.send(segment('image', {
-                        url: 'C:/Users/Server/Desktop/Bot/external/main/screenshot/screenshot.png'
-                    }))
-                }, 9000);
+                    session.send("已发送请求.")
+                    setTimeout(() => {
+                        fetch("http://192.168.0.106:3000/sc", {
+                            method: "POST"
+                        })
+                    }, 6000);
+                    setTimeout(() => {
+                        session.send(segment('image', {
+                            url: 'C:/Users/Server/Desktop/Bot/external/main/screenshot/screenshot.png'
+                        }))
+                    }, 9000);
+                }
+                else session.send("未知指令.")
             }
             else session.send("无权限.")
         }
