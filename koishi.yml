@@ -93,6 +93,10 @@ plugins:
     minInterval: 30
   ~change-auth-callme:7t5bfr: {}
   ~memes-api:sf5482: {}
+  verifier:aoqlr0:
+    onFriendRequest: true
+    onGuildMemberRequest: true
+    onGuildRequest: true
 prefix:
   - .
   - /

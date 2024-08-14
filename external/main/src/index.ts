@@ -28,6 +28,13 @@ export function apply(ctx: Context) {
         }
         return false;
     }
+    function authCheck(userId: string) {
+        let operators = fs.readFileSync("./operator.json", "utf-8");
+        for (let i = 0; i < operators.length; i++) {
+            if (userId == operators[i]) return true;
+        }
+        return false;
+    }
     ctx.on('message', (session) => {
         console.log(session.channelId + ' ' + session.userId + ':' + session.content)
         if (addPrefixJudge(session, 'jwz') || addPrefixJudge(session, '金炜智')) {
@@ -92,7 +99,7 @@ export function apply(ctx: Context) {
             }))
         }
         else if (addPrefixJudge(session.content.substring(0, 3), 'maa') || addPrefixJudge(session.content.substring(0, 4), 'maa')) {
-            if (session.userId == "2803355799") {
+            if (authCheck(session.userId)) {
                 let a = 0;
                 let cmdList = ["on", "off", "sc"]
                 if (addPrefixJudge(session.content.substring(0, 3), 'maa')) a = 4;
