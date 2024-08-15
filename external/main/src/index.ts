@@ -29,7 +29,7 @@ export function apply(ctx: Context) {
         return false;
     }
     function authCheck(userId: string) {
-        let operators = fs.readFileSync("./operator.json", "utf-8");
+        let operators = JSON.parse(fs.readFileSync("C:/Users/Server/Desktop/Bot/external/main/src/operator.json", "utf-8"));
         for (let i = 0; i < operators.length; i++) {
             if (userId == operators[i]) return true;
         }
