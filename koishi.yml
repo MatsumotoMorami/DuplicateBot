@@ -12,9 +12,6 @@ plugins:
       maimaidx.alias-search:
         aliases:
           别名: null
-      maimaidx.rating-calc:
-        aliases:
-          rc: null
     help:enr3nn: {}
     http:ji91bj: {}
     ~inspect:tgmt74: {}

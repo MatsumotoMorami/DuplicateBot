@@ -1,65 +1,65 @@
 {
-  "hash": "014e9365",
-  "browserHash": "5b24dc2b",
+  "hash": "b7ec5a0a",
+  "browserHash": "c8fa3315",
   "optimized": {
     "vue": {
       "src": "../../../node_modules/vue/dist/vue.runtime.esm-bundler.js",
       "file": "vue.js",
-      "fileHash": "201d4105",
+      "fileHash": "63276504",
       "needsInterop": false
     },
     "vue-router": {
       "src": "../../../node_modules/vue-router/dist/vue-router.mjs",
       "file": "vue-router.js",
-      "fileHash": "4187c164",
+      "fileHash": "2247398d",
       "needsInterop": false
     },
     "element-plus": {
       "src": "../../../node_modules/element-plus/es/index.mjs",
       "file": "element-plus.js",
-      "fileHash": "0341d24c",
+      "fileHash": "09a468f5",
       "needsInterop": false
     },
     "@vueuse/core": {
       "src": "../../../node_modules/@vueuse/core/index.mjs",
       "file": "@vueuse_core.js",
-      "fileHash": "d5f174f3",
+      "fileHash": "2ed0d949",
       "needsInterop": false
     },
     "@popperjs/core": {
       "src": "../../../node_modules/@popperjs/core/dist/index.mjs",
       "file": "@popperjs_core.js",
-      "fileHash": "29342828",
+      "fileHash": "e157ad2b",
       "needsInterop": false
     },
     "marked": {
       "src": "../../../node_modules/marked/lib/marked.esm.js",
       "file": "marked.js",
-      "fileHash": "8a471c0d",
+      "fileHash": "2edf5789",
       "needsInterop": false
     },
     "xss": {
       "src": "../../../node_modules/xss/lib/index.js",
       "file": "xss.js",
-      "fileHash": "8b5d0652",
+      "fileHash": "d8ee62cc",
       "needsInterop": true
     },
     "@koishijs/client": {
       "src": "../../../node_modules/@koishijs/client/client/index.ts",
       "file": "@koishijs_client.js",
-      "fileHash": "f5963f82",
+      "fileHash": "361249a6",
       "needsInterop": false
     },
     "@koishijs/components": {
       "src": "../../../node_modules/@koishijs/components/client/index.ts",
       "file": "@koishijs_components.js",
-      "fileHash": "f852be71",
+      "fileHash": "dbe4fc50",
       "needsInterop": false
     },
     "vue-i18n": {
       "src": "../../../node_modules/vue-i18n/dist/vue-i18n.mjs",
       "file": "vue-i18n.js",
-      "fileHash": "a2f5b549",
+      "fileHash": "8b196ba2",
       "needsInterop": false
     }
   },

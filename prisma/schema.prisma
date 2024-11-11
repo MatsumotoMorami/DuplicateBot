@@ -1,0 +1,44 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model whitelist{
+    id    Int     @id @default(autoincrement())
+    userId      String
+}
+
+model userInfo{
+    id    Int     @id @default(autoincrement())
+    userId  String  @default("0")   @unique
+    name    String
+    auth    Int
+    discount    Float
+    money   Float
+    spent   Float
+    pc  Int
+    billing     Boolean
+}
+
+model playLog{
+    id    Int     @id @default(autoincrement())
+    userId      String
+    enterTime   BigInt
+    exitTime    BigInt
+    cost        Float
+}
+
+model rechargeLog{
+    id    Int     @id @default(autoincrement())
+    userId      String
+    amount      Float
+    platform    String
+    timeStamp   BigInt
+}
