@@ -353,7 +353,7 @@ export function apply(ctx: Context) {
                             spent: 'desc'
                         }
                     })
-                    data.slice(0, 10);
+                    data=data.slice(0, 10);
                     let ans = "XYwow 消费排行榜\n";
                     ans += "共有 " + (await prisma.userInfo.count()).toString() + " 名玩家\n";
                     for (let i = 0; i < data.length; i++) {
@@ -535,11 +535,16 @@ export function apply(ctx: Context) {
                     prisma.$disconnect();
                 })
             }
-            else if ((addPrefixJudge(session.content, "enter")||addPrefixJudge(session.content, "入店")) && await authCheck(session.userId, session, 2)) {
+            else if ((addPrefixJudge(session.content, "enter")||addPrefixJudge(session.content, "进店")) && await authCheck(session.userId, session, 2)) {
                 const prisma = new PrismaClient();
                 let userId = session.userId;
                 async function main() {
-                    if ((await prisma.userInfo.findMany({ where: { userId } }))[0].billing == false) {
+                    let user=(await prisma.userInfo.findMany({ where: { userId } }))[0];
+                    if (user.billing == false) {
+                        if(user.discount!=0&&user.money<10){
+                            session.send("请保证余额大于10元再进店.")
+                            return ;
+                        }
                         await prisma.playLog.create({
                             data: {
                                 userId,
@@ -550,6 +555,16 @@ export function apply(ctx: Context) {
                         }).then(async () => {
                             await prisma.userInfo.update({ where: { userId }, data: { billing: true } }).then(() => session.send("已成功进店."))
                         })
+                        if(user.auth==0){
+                            await prisma.billingOperator.create({
+                                data:{userId}
+                            })
+                        }
+                        else{
+                            await prisma.billingPlayer.create({
+                                data:{userId}
+                            })
+                        }
                     }
                     else {
                         session.send("已在店内，无法重复进店.");
@@ -569,10 +584,6 @@ export function apply(ctx: Context) {
                     let user = (await prisma.userInfo.findMany({ where: { userId } }))[0]
                     if (user.billing == false) {
                         session.send("您不在店内.");
-                        return;
-                    }
-                    if (user.money < 10) {
-                        session.send("余额不足, 禁止进店.");
                         return;
                     }
                     let exitTime = BigInt(new Date().getTime());
@@ -606,6 +617,16 @@ export function apply(ctx: Context) {
                             }
                         })
                     });
+                    if(user.auth==0){
+                        await prisma.billingOperator.deleteMany({
+                            where:{userId}
+                        })
+                    }
+                    else{
+                        await prisma.billingPlayer.deleteMany({
+                            where:{userId}
+                        })
+                    }
                     let u = await prisma.userInfo.findMany({
                         where: { userId }
                     });
@@ -613,6 +634,18 @@ export function apply(ctx: Context) {
                     session.send("您已离店.\n游玩时长 " + ds + "\n消费 " + cost + " 元\n余额为 " + money + " 元.");
                 }
                 main().then(() => {
+                    prisma.$disconnect();
+                })
+            }
+            else if((addPrefixJudge(session.content,"j")||addPrefixJudge(session.content,"几"))&&authCheck(session.userId,session,1)){
+                const prisma=new PrismaClient();
+                async function main(){
+                    let player=await prisma.billingPlayer.findMany();
+                    let operator=await prisma.billingOperator.findMany();
+                    let str="店内有 "+operator.length+" 位STAFF与 "+player.length+" 位玩家.";
+                    session.send(str);
+                }
+                main().then(()=>{
                     prisma.$disconnect();
                 })
             }
@@ -655,10 +688,9 @@ export function apply(ctx: Context) {
             else if (addPrefixJudge(session.content, "test") && await authCheck(session.userId, session, 0)) {
                 const prisma = new PrismaClient();
                 async function main() {
-                    let p = await prisma.userInfo.findMany();
-                    console.log(p);
-                    p=await prisma.whitelist.findMany();
-                    console.log(p);
+                    await prisma.billingPlayer.create({
+                        data:{userId:"715746717"}
+                    })
                 }
                 main().then(() => {
                     prisma.$disconnect();

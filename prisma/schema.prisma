@@ -42,3 +42,13 @@ model rechargeLog{
     platform    String
     timeStamp   BigInt
 }
+
+model billingOperator{
+    id    Int     @id @default(autoincrement())
+    userId  String
+}
+
+model billingPlayer{
+    id    Int     @id @default(autoincrement())
+    userId  String
+}
