@@ -1,8 +1,6 @@
 import { Context, h, Schema, segment } from 'koishi'
 import fs from "node:fs"
-import { Prisma, PrismaClient } from '@prisma/client'
-import { mainModule } from 'node:process'
-import { PrismaClientInitializationError } from '@prisma/client/runtime/library'
+import { PrismaClient } from '@prisma/client'
 
 export const name = 'main'
 
@@ -207,12 +205,12 @@ export function apply(ctx: Context) {
                 const w = await prisma.whitelist.findMany({ where: { userId } });
                 return w.length > 0;
             })();
-    
+
             if (!checkWhite) {
                 session.send("您未被加入白名单，禁止使用.");
                 return false;
             }
-    
+
             const checkLevel = await (async () => {
                 const l = await prisma.userInfo.findMany({
                     where: {
@@ -221,12 +219,12 @@ export function apply(ctx: Context) {
                 });
                 return l.length > 0;
             })();
-    
+
             if (!checkLevel) {
                 session.send("权限不足.");
                 return false;
             }
-    
+
             return true;
         } finally {
             await prisma.$disconnect();
@@ -323,7 +321,7 @@ export function apply(ctx: Context) {
         //     else session.send("无权限.")
         // }
         if (session.channelId == "953068755" || session.channelId == "private:2803355799") {
-            if ((addPrefixJudge(session.content, "money")||(addPrefixJudge(session.content, "余额") ))&& await authCheck(session.userId, session, 2)) {
+            if ((addPrefixJudge(session.content, "money") || (addPrefixJudge(session.content, "余额"))) && await authCheck(session.userId, session, 2)) {
                 let prisma = new PrismaClient();
                 let userId = session.userId;
                 async function main() {
@@ -340,7 +338,7 @@ export function apply(ctx: Context) {
                     await prisma.$disconnect();
                 })
             }
-            else if ((addPrefixJudge(session.content, "baltop")||(addPrefixJudge(session.content, "排行"))) && await authCheck(session.userId, session, 1)) {
+            else if ((addPrefixJudge(session.content, "baltop") || (addPrefixJudge(session.content, "排行"))) && await authCheck(session.userId, session, 1)) {
                 const prisma = new PrismaClient();
                 async function main() {
                     let data = await prisma.userInfo.findMany({
@@ -353,11 +351,11 @@ export function apply(ctx: Context) {
                             spent: 'desc'
                         }
                     })
-                    data=data.slice(0, 10);
+                    data = data.slice(0, 10);
                     let ans = "XYwow 消费排行榜\n";
                     ans += "共有 " + (await prisma.userInfo.count()).toString() + " 名玩家\n";
                     for (let i = 0; i < data.length; i++) {
-                        ans += (i + 1).toString() + ". " + data[i].name + ' ' + data[i].spent + '￥\n';
+                        ans += (i + 1).toString() + ". " + data[i].name.padEnd(10," ") + ' ' + data[i].spent.toString() + '￥\n';
                     }
                     session.send(ans);
                 }
@@ -365,7 +363,7 @@ export function apply(ctx: Context) {
                     await prisma.$disconnect();
                 })
             }
-            else if ((addPrefixJudge(session.content, "query")||(addPrefixJudge(session.content, "个人信息"))) && await authCheck(session.userId, session, 2)) {
+            else if ((addPrefixJudge(session.content, "query") || (addPrefixJudge(session.content, "个人信息"))) && await authCheck(session.userId, session, 2)) {
                 const prisma = new PrismaClient();
                 async function main() {
                     let str = session.userId;
@@ -514,7 +512,7 @@ export function apply(ctx: Context) {
                     prisma.$disconnect();
                 })
             }
-            else if (addPrefixJudge(session.content, "reg") || addPrefixJudge(session.content, "register")||(addPrefixJudge(session.content, "注册"))) {
+            else if (addPrefixJudge(session.content, "reg") || addPrefixJudge(session.content, "register") || (addPrefixJudge(session.content, "注册"))) {
                 const prisma = new PrismaClient();
                 async function main() {
                     let userId = session.userId;
@@ -535,15 +533,15 @@ export function apply(ctx: Context) {
                     prisma.$disconnect();
                 })
             }
-            else if ((addPrefixJudge(session.content, "enter")||addPrefixJudge(session.content, "进店")) && await authCheck(session.userId, session, 2)) {
+            else if ((addPrefixJudge(session.content, "enter") || addPrefixJudge(session.content, "进店")) && await authCheck(session.userId, session, 2)) {
                 const prisma = new PrismaClient();
                 let userId = session.userId;
                 async function main() {
-                    let user=(await prisma.userInfo.findMany({ where: { userId } }))[0];
+                    let user = (await prisma.userInfo.findMany({ where: { userId } }))[0];
                     if (user.billing == false) {
-                        if(user.discount!=0&&user.money<10){
+                        if (user.discount != 0 && user.money < 10) {
                             session.send("请保证余额大于10元再进店.")
-                            return ;
+                            return;
                         }
                         await prisma.playLog.create({
                             data: {
@@ -555,14 +553,14 @@ export function apply(ctx: Context) {
                         }).then(async () => {
                             await prisma.userInfo.update({ where: { userId }, data: { billing: true } }).then(() => session.send("已成功进店."))
                         })
-                        if(user.auth==0){
+                        if (user.auth == 0) {
                             await prisma.billingOperator.create({
-                                data:{userId}
+                                data: { userId }
                             })
                         }
-                        else{
+                        else {
                             await prisma.billingPlayer.create({
-                                data:{userId}
+                                data: { userId }
                             })
                         }
                     }
@@ -574,7 +572,7 @@ export function apply(ctx: Context) {
                     prisma.$disconnect();
                 })
             }
-            else if ((addPrefixJudge(session.content, "exit")||addPrefixJudge(session.content, "离店")) && await authCheck(session.userId, session, 2)) {
+            else if ((addPrefixJudge(session.content, "exit") || addPrefixJudge(session.content, "离店")) && await authCheck(session.userId, session, 2)) {
                 let prisma = new PrismaClient();
                 let userId = session.userId;
                 async function main() {
@@ -617,14 +615,14 @@ export function apply(ctx: Context) {
                             }
                         })
                     });
-                    if(user.auth==0){
+                    if (user.auth == 0) {
                         await prisma.billingOperator.deleteMany({
-                            where:{userId}
+                            where: { userId }
                         })
                     }
-                    else{
+                    else {
                         await prisma.billingPlayer.deleteMany({
-                            where:{userId}
+                            where: { userId }
                         })
                     }
                     let u = await prisma.userInfo.findMany({
@@ -637,26 +635,28 @@ export function apply(ctx: Context) {
                     prisma.$disconnect();
                 })
             }
-            else if((addPrefixJudge(session.content,"j")||addPrefixJudge(session.content,"几"))&&authCheck(session.userId,session,1)){
-                const prisma=new PrismaClient();
-                async function main(){
-                    let player=await prisma.billingPlayer.findMany();
-                    let operator=await prisma.billingOperator.findMany();
-                    let str="店内有 "+operator.length+" 位STAFF与 "+player.length+" 位玩家.";
+            else if ((addPrefixJudge(session.content, "j") || addPrefixJudge(session.content, "几")) && authCheck(session.userId, session, 1)) {
+                const prisma = new PrismaClient();
+                async function main() {
+                    let player = await prisma.billingPlayer.findMany();
+                    let operator = await prisma.billingOperator.findMany();
+                    let str = "店内有 " + operator.length + " 位STAFF与 " + player.length + " 位玩家.";
                     session.send(str);
                 }
-                main().then(()=>{
+                main().then(() => {
                     prisma.$disconnect();
                 })
             }
-            else if ((addPrefixJudge(session.content, "qrcode")||(addPrefixJudge(session.content, "二维码"))) && await authCheck(session.userId, session, 2)) {
+            else if ((addPrefixJudge(session.content, "qrcode") || (addPrefixJudge(session.content, "二维码"))) && await authCheck(session.userId, session, 2)) {
                 session.send("wx\n" + segment('image', {
                     url: 'C:/Users/Server/Desktop/Bot/external/main/qrcode/w1.png'
                 }) + "zfb\n" + segment('image', {
                     url: 'C:/Users/Server/Desktop/Bot/external/main/qrcode/a1.png'
                 }))
             }
-            else if ((addPrefixJudge(session.content, "gamble")||(addPrefixJudge(session.content, "赌一把"))) && await authCheck(session.userId, session, 2)) {
+            else if ((addPrefixJudge(session.content, "gamble") || (addPrefixJudge(session.content, "赌一把"))) && await authCheck(session.userId, session, 2)) {
+                session.send("维护中");
+                return ;
                 const prisma = new PrismaClient();
                 async function main() {
                     let users = await prisma.userInfo.findMany({ where: { userId: session.userId } });
@@ -685,12 +685,40 @@ export function apply(ctx: Context) {
                     prisma.$disconnect();
                 })
             }
+            else if((addPrefixJudge(session.content,"切换国服")||addPrefixJudge(session.content,"切国服"))&&await authCheck(session.userId,session,0)){
+                session.send(await fetch("http://frp-fly.top:48996/cn").then((res)=>{
+                    return res.text();
+                }))
+            }
+            else if((addPrefixJudge(session.content,"切换日服")||addPrefixJudge(session.content,"切日服"))&&await authCheck(session.userId,session,1)){
+                session.send(await fetch("http://frp-fly.top:48996/jp").then((res)=>{
+                    return res.text();
+                }))
+            }
+            else if((addPrefixJudge(session.content,"切换国际服")||addPrefixJudge(session.content,"切国际服"))&&await authCheck(session.userId,session,1)){
+                session.send(await fetch("http://frp-fly.top:48996/en").then((res)=>{
+                    return res.text();
+                }))
+            }
+            else if((addPrefixJudge(session.content,"切换音击")||addPrefixJudge(session.content,"切音击"))&&await authCheck(session.userId,session,1)){
+                session.send(await fetch("http://frp-fly.top:48996/ongeki").then((res)=>{
+                    return res.text();
+                }))
+            }
+            else if(addPrefixJudge(session.content,"重启")&&await authCheck(session.userId,session,0)){
+                session.send(await fetch("http://frp-fly.top:48996/restart").then((res)=>{
+                    return res.text();
+                }))
+            }
+            else if(addPrefixJudge(session.content,"关hdd")&&await authCheck(session.userId,session,0)){
+                session.send(await fetch("http://frp-fly.top:48996/shut").then((res)=>{
+                    return res.text();
+                }))
+            }
             else if (addPrefixJudge(session.content, "test") && await authCheck(session.userId, session, 0)) {
                 const prisma = new PrismaClient();
                 async function main() {
-                    await prisma.billingPlayer.create({
-                        data:{userId:"715746717"}
-                    })
+                    await prisma.billingOperator.delete({where:{id:3}});
                 }
                 main().then(() => {
                     prisma.$disconnect();
